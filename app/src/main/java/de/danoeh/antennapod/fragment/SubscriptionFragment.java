@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.annotation.StringRes;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -17,6 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
+import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.Callable;
 
@@ -43,9 +50,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Fragment for displaying feed subscriptions
@@ -85,6 +89,11 @@ public class SubscriptionFragment extends Fragment {
         subscriptionGridLayout = root.findViewById(R.id.subscriptions_grid);
         subscriptionGridLayout.setNumColumns(prefs.getInt(PREF_NUM_COLUMNS, 3));
         registerForContextMenu(subscriptionGridLayout);
+
+        MainActivity activity = (MainActivity) getActivity();
+        FloatingActionButton fab = root.findViewById(R.id.add_podcast_fab);
+        fab.setOnClickListener(view -> activity.loadChildFragment(new AddFeedFragment()));
+
         return root;
     }
 
